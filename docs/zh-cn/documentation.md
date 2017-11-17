@@ -41,12 +41,14 @@ pyecharts 是一个用于生成 Echarts 图表的类库。实际上就是 Echart
     * Scatter（散点图）
     * Scatter3D（3D 散点图）
     * ThemeRiver（主题河流图）
+    * TreeMap（树图）
     * WordCloud（词云图）
 * [用户自定义](https://github.com/chenjiandongx/pyecharts/blob/master/docs/zh-cn/documentation.md#用户自定义)
     * Grid 类：并行显示多张图
     * Overlap 类：结合不同类型图表叠加画在同张图上
     * Page 类：同一网页按顺序展示多图
     * Timeline 类：提供时间线轮播多张图
+* [使用技巧](https://github.com/chenjiandongx/pyecharts/blob/master/docs/zh-cn/documentation.md#使用技巧)
 * [集成Flask&Django](https://github.com/chenjiandongx/pyecharts/blob/master/docs/zh-cn/documentation.md#集成Flask&Django)
 * [更多示例](https://github.com/chenjiandongx/pyecharts/blob/master/docs/zh-cn/documentation.md#更多示例)
 * [关于项目](https://github.com/chenjiandongx/pyecharts/blob/master/docs/zh-cn/documentation.md#关于项目)
@@ -109,7 +111,7 @@ Known nbextensions:
       - Validating: OK
 ```
 
-在罕见的情况下，如果你想要 pyecharts 更新所有的脚本文件的话，你可以运行下面的命令：
+在特殊的情况下，如果你想要 pyecharts 更新所有的脚本文件的话，你可以运行下面的命令：
 
 ```shell
 $ git clone https://github.com/chfw/jupyter-echarts.git
@@ -118,7 +120,7 @@ $ jupyter nbextension install echarts --user
 ```
 在下一个画图动作的时候，您的脚本文件会被更新。
 
-下面这个删除命令估计只有参与 pyecharts 开发的同学会用到
+下面这个删除命令估计只有参与 pyecharts 开发者才会用到
 
 ```shell
 $ jupyter nbextension uninstall echarts --user
@@ -262,6 +264,10 @@ cast(seq)
     x 轴两边留白策略，适用于类目轴。类目轴中 boundaryGap 可以配置为 True 和 False。默认为 True，这时候刻度只是作为分隔线，标签和数据点都会在两个刻度之间的带(band)中间，即两边留白。
 * is_yaxis_boundarygap -> bool  
     y 轴两边留白策略，适用于类目轴。类目轴中 boundaryGap 可以配置为 True 和 False。默认为 True，这时候刻度只是作为分隔线，标签和数据点都会在两个刻度之间的带(band)中间，即两边留白。
+* is_xaxis_show -> bool  
+    是否显示 x 轴
+* is_yaxis_show -> bool  
+    是否显示 y 轴
 * x_axis -> list  
     x 轴数据项
 * xaxis_interval -> int  
@@ -333,7 +339,7 @@ cast(seq)
 * is_datazoom_show -> bool  
     是否使用区域缩放组件，默认为 False
 * datazoom_type -> str    
-    区域缩放组件类型，默认为'slider'，有'slider', 'inside'可选
+    区域缩放组件类型，默认为'slider'，有'slider', 'inside', 'both'可选
 * datazoom_range -> list    
     区域缩放的范围，默认为[50, 100]
 * datazoom_orient -> str  
@@ -368,14 +374,20 @@ cast(seq)
 
 * is_label_show -> bool  
     是否正常显示标签，默认不显示。标签即各点的数据项信息  
-* is_emphasis -> bool  
+* is_label_emphasis -> bool  
     是否高亮显示标签，默认显示。高亮标签即选中数据时显示的信息项。
 * label_pos -> str  
     标签的位置，Bar 图默认为'top'。有'top', 'left', 'right', 'bottom', 'inside','outside'可选
+* label_emphasis_pos -> str  
+    高亮标签的位置，Bar 图默认为'top'。有'top', 'left', 'right', 'bottom', 'inside','outside'可选
 * label_text_color -> str  
     标签字体颜色，默认为 "#000"
+* label_emphasis_textcolor -> str  
+    高亮标签字体颜色，默认为 "#fff"
 * label_text_size -> int  
     标签字体大小，默认为 12
+* label_emphasis_textsize -> int  
+    高亮标签字体大小，默认为 12
 * is_random -> bool  
     是否随机排列颜色列表，默认为 False
 * label_color -> list  
@@ -542,14 +554,18 @@ cast(seq)
     标记点，默认有'min', 'max', 'average'可选。支持自定义标记点，具体使用如下  
     [{"coord": [a1, b1], "name": "first markpoint"}, {"coord": [a2, b2], "name": "second markpoint"}]  
     需自己传入标记点字典，共有两个键值对，'coord' 对应为 x y 轴坐标， 'name' 为标记点名称
-* mark_line -> list  
-    标记线，默认有'min', 'max', 'average'可选
 * mark_point_symbol -> str  
     标记点图形，，默认为'pin'，有'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow'可选
 * mark_point_symbolsize -> int  
     标记点图形大小，默认为 50
 * mark_point_textcolor -> str  
     标记点字体颜色，默认为'#fff'
+* mark_line -> list  
+    标记线，默认有'min', 'max', 'average'可选
+* mark_line_symbolsize -> int  
+    标记线图形大小，默认为 15
+* mark_line_valuedim -> str  
+    指定在哪个维度上指定最大值最小值。这可以是维度的直接名称，Line 时可以是 x、angle 等、Kline 图时可以是 open、close、highest、lowest。
 
 
 **toolbox：设置 `is_more_utils` 为 True 可以提供更多的实用工具按钮。默认只提供『数据视图』和『下载』按钮**
@@ -562,7 +578,7 @@ cast(seq)
 
 Bar.add() 方法签名
 ```python
-add(name, x_axis, y_axis, is_stack=False, **kwargs)
+add(name, x_axis, y_axis, is_stack=False, bar_category_gap='20%', **kwargs)
 ```
 * name -> str  
     图例名称
@@ -572,6 +588,8 @@ add(name, x_axis, y_axis, is_stack=False, **kwargs)
     y 坐标轴数据  
 * is_stack -> bool  
     数据堆叠，同个类目轴上系列配置相同的 stack 值可以堆叠放置  
+* bar_category_gap -> int/str   
+    类目轴的柱状距离，当设置为 0 时柱状是紧挨着（直方图类型），默认为 '20%'
 
 ```python
 from pyecharts import Bar
@@ -672,7 +690,7 @@ add(name, x_axis, y_axis, data, grid3d_opacity=1, grid3d_shading='color', **kwar
     x 坐标轴数据。需为类目轴，也就是不能是数值。
 * y_axis -> str  
     y 坐标轴数据。需为类目轴，也就是不能是数值。
-* data -> [list],包含列表的列表  
+* data -> [list], 包含列表的列表  
     数据项，数据中，每一行是一个『数据项』，每一列属于一个『维度』
 * grid3d_opacity -> int  
     3D 笛卡尔坐标系组的透明度（柱状的透明度），默认为 1，完全不透明。
@@ -773,7 +791,7 @@ add(name, x_axis, y_axis, **kwargs)
     图例名称
 * x_axis -> list  
     x 坐标轴数据
-* y_axis -> [list],包含列表的列表   
+* y_axis -> [list], 包含列表的列表   
     y 坐标轴数据，二维数组的每一数组项（上例中的每行）是渲染一个 box，它含有五个量值，依次是：  
     [min,  Q1,  median (or Q2),  Q3,  max]
 
@@ -1175,16 +1193,29 @@ graph.render()
 
 HeatMap.add() 方法签名
 ```python
-add(name, x_axis, y_axis, data, **kwargs)
+add(*args, **kwargs)
 ```
+如果指定了 `is_calendar_heatmap`（使用日历热力图）为 True，则参数为
+* name -> str  
+    图例名称
+* data -> [list], 包含列表的列表  
+    数据项，数据中，每一行是一个『数据项』，每一列属于一个『维度』
+* calendar_date_range -> str/list  
+    日历热力图的日期, "2016" 表示 2016 年, ["2016-5-5", "2017-5-5"] 表示 2016 年 5 月 5 日至 2017 年 5 月 5 日  
+* calendar_cell_size -> list  
+    日历每格框的大小，可设置单值 或数组 第一个元素是宽 第二个元素是高，支持设置自适应 "auto"。默认为 ["auto", 20]
+
+默认为不指定，参数为
 * name -> str  
     图例名称
 * x_axis -> str  
     x 坐标轴数据。需为类目轴，也就是不能是数值。
 * y_axis -> str  
     y 坐标轴数据。需为类目轴，也就是不能是数值。
-* data -> [list],包含列表的列表    
+* data -> [list], 包含列表的列表  
     数据项，数据中，每一行是一个『数据项』，每一列属于一个『维度』
+
+默认情况，不指定 `is_calendar_heatmap`
 ```python
 import random
 from pyecharts import HeatMap
@@ -1200,6 +1231,27 @@ heatmap.render()
 ```
 ![heatmap-0](https://github.com/chenjiandongx/pyecharts/blob/master/images/heatmap-0.gif)
 
+使用日历热力图，指定 `is_calendar_heatmap` 为 True
+```python
+import datetime
+import random
+from pyecharts import HeatMap
+
+begin = datetime.date(2017, 1, 1)
+end = datetime.date(2017, 12, 31)
+data = [[str(begin + datetime.timedelta(days=i)),
+        random.randint(1000, 25000)] for i in range((end - begin).days + 1)]
+heatmap = HeatMap("日历热力图示例", "某人 2017 年微信步数情况", width=1100)
+heatmap.add("", data, is_calendar_heatmap=True,
+            visual_text_color='#000', visual_range_text=['', ''],
+            visual_range=[1000, 25000], calendar_cell_size=['auto', 30],
+            is_visualmap=True, calendar_date_range="2017",
+            visual_orient="horizontal", visual_pos="center",
+            visual_top="80%", is_piecewise=True)
+heatmap.render()
+```
+![heatmap-1](https://github.com/chenjiandongx/pyecharts/blob/master/images/heatmap-1.gif)
+
 **Note：** 热力图必须配合 [通用配置项](https://github.com/chenjiandongx/pyecharts/blob/master/docs/zh-cn/documentation.md#通用配置项) 中的 VisualMap 使用才有效果。
 
 
@@ -1214,7 +1266,7 @@ add(name, x_axis, y_axis, **kwargs)
     图例名称
 * x_axis -> list  
     x 坐标轴数据
-* y_axis -> [list],包含列表的列表   
+* y_axis -> [list], 包含列表的列表   
     y 坐标轴数据。数据中，每一行是一个『数据项』，每一列属于一个『维度』。
     数据项具体为 [open, close, lowest, highest] （即：[开盘值, 收盘值, 最低值, 最高值]）
 ```python
@@ -1260,6 +1312,15 @@ kline.render()
 ```
 ![kline-2](https://github.com/chenjiandongx/pyecharts/blob/master/images/kline-2.gif)
 
+指定 markLine 位于开盘或者收盘上
+```python
+kline = Kline("K 线图示例")
+kline.add("日K", ["2017/7/{}".format(i + 1) for i in range(31)],
+          v1, mark_line=["max"], mark_line_symbolsize=0,
+          datazoom_orient='vertical', mark_line_valuedim='close')
+kline.render()
+```
+![kline-3](https://github.com/chenjiandongx/pyecharts/blob/master/images/kline-3.png)
 
 ## Line（折线/面积图）
 > 折线图是用折线将各个数据点标志连接起来的图表，用于展现数据的变化趋势。
@@ -1374,7 +1435,7 @@ add(name, data, grid3d_opacity=1, **kwargs)
 ```
 * name -> str  
     图例名称
-* data -> [list],包含列表的列表  
+* data -> [list], 包含列表的列表  
     数据项，数据中，每一行是一个『数据项』，每一列属于一个『维度』
 * grid3d_opacity -> int  
     3D 笛卡尔坐标系组的透明度（线的透明度），默认为 1，完全不透明。
@@ -1558,7 +1619,7 @@ add(name, data, **kwargs)
 ```
 * name -> str
     图例名称
-* data -> [list],包含列表的列表  
+* data -> [list], 包含列表的列表  
     数据项。数据中，每一行是一个『数据项』，每一列属于一个『维度』
 
 Parallel.config() 方法签名
@@ -1722,7 +1783,7 @@ add(name, data, angle_data=None, radius_data=None, type='line', symbol_size=4, s
 ```
 * name -> str  
     图例名称
-* data -> [list],包含列表的列表  
+* data -> [list], 包含列表的列表  
     数据项 [极径，极角 [数据值]]
 * angle_data -> list  
     角度类目数据
@@ -1832,7 +1893,7 @@ add(name, value, item_color=None, **kwargs)
 ```
 * name -> list  
     图例名称
-* value -> [list],包含列表的列表 
+* value -> [list], 包含列表的列表 
     数据项。数据中，每一行是一个『数据项』，每一列属于一个『维度』
 * item_color -> str  
     指定单图例颜色
@@ -2146,7 +2207,7 @@ add(name, data, grid3d_opacity=1, **kwargs)
 ```
 * name -> str  
     图例名称
-* data -> [list],包含列表的列表  
+* data -> [list], 包含列表的列表  
     数据项，数据中，每一行是一个『数据项』，每一列属于一个『维度』
 * grid3d_opacity -> int  
     3D 笛卡尔坐标系组的透明度（点的透明度），默认为 1，完全不透明。
@@ -2178,7 +2239,7 @@ add(name, data)
 ```
 * name -> list  
     图例名称，必须为 list 类型，list 中每个值为数据项中的种类。
-* data -> [list],包含列表的列表  
+* data -> [list], 包含列表的列表  
     数据项，数据中，每一行是一个『数据项』，每一列属于一个『维度』。每个数据项至少需要三个维度，如 ['2015/11/08', 10, 'DQ']，分别为 [时间，数值，种类（图例名）]
 
 ```python
@@ -2228,6 +2289,115 @@ tr.render()
 ![themeriver-0](https://github.com/chenjiandongx/pyecharts/blob/master/images/themeriver.gif)
 
 **Note：** 可以看到，每个数据项中的第三个数值就是该项的种类，而种类可以在 `add()` 第一个参数指定。
+
+
+## TreeMap（树图）
+TreeMap.add() 方法签名
+```python
+add(name, attr, value, shape="circle", word_gap=20, word_size_range=None, rotate_step=45)
+```
+* name -> str  
+    图例名称
+* data -> list  
+    ```
+    树图的数据项是 **一棵树**，每个节点包括`value`, `name`（可选）, `children`（也是树，可选）如下所示
+    [
+        {
+            value: 1212,    # 数值
+            # 子节点
+            children: [
+                {
+                    # 子节点数值
+                    value: 2323,
+                    # 子节点名
+                    name: 'description of this node',
+                    children: [...],
+                },
+                {
+                    value: 4545,
+                    name: 'description of this node',
+                    children: [
+                        {
+                            value: 5656,
+                            name: 'description of this node',
+                            children: [...]
+                        },
+                        ...
+                    ]
+                }
+            ]
+        },
+        ...
+    ]
+    ```
+* treemap_left_depth -> int  
+    leafDepth 表示『展示几层』，层次更深的节点则被隐藏起来。设置了 leafDepth 后，下钻（drill down）功能开启。drill down 功能即点击后才展示子层级。例如，leafDepth 设置为 1，表示展示一层节点。
+* treemap_drilldown_icon -> str  
+    当节点可以下钻时的提示符。只能是字符。默认为 '▶'
+* treemap_visible_min -> int  
+    如果某个节点的矩形的面积，小于这个数值（单位：px平方），这个节点就不显示。
+
+```python
+from pyecharts import TreeMap
+
+data = [
+    {
+        "value": 40,
+        "name": "我是A",
+    },
+    {
+        "value": 180,
+        "name": "我是B",
+        "children": [
+            {
+                "value": 76,
+                "name": "我是B.children",
+                "children": [
+                    {
+                        "value": 12,
+                        "name": "我是B.children.a",
+                    },
+                    {
+                        "value": 28,
+                        "name": "我是B.children.b",
+                    },
+                    {
+                        "value": 20,
+                        "name": "我是B.children.c",
+                    },
+                    {
+                        "value": 16,
+                        "name": "我是B.children.d",
+                    }]
+            }]}
+]
+
+treemap = TreeMap("树图-默认示例", width=1200, height=600)
+treemap.add("演示数据", data, is_label_show=True, label_pos='inside')
+treemap.render()
+```
+![treemap-0](https://github.com/chenjiandongx/pyecharts/blob/master/images/treemap-0.png)
+
+```python
+treemap = TreeMap("树图-下钻示例", width=1200, height=600)
+treemap.add("演示数据", data, is_label_show=True, label_pos='inside',
+            treemap_left_depth=1)
+treemap.render()
+```
+![treemap-1](https://github.com/chenjiandongx/pyecharts/blob/master/images/treemap-1.gif)
+
+```python
+from pyecharts import TreeMap
+
+treemap = TreeMap("树图示例", width=1200, height=600)
+import os
+import json
+with open(os.path.join("..", "json", "treemap.json"), "r", encoding="utf-8") as f:
+        data = json.load(f)
+treemap.add("演示数据", data, is_label_show=True, label_pos='inside')
+treemap.render()
+```
+![treemap-2](https://github.com/chenjiandongx/pyecharts/blob/master/images/treemap-2.gif)
 
 
 ## WordCloud（词云图）
@@ -3052,6 +3222,39 @@ timeline.add(overlap_4.chart, '5 月')
 timeline.render()
 ```
 ![timeline-2](https://github.com/chenjiandongx/pyecharts/blob/master/images/timeline-2.gif)
+
+
+# 使用技巧
+
+## 统一风格
+如果想在同一个图或者多个图内保持统一的风格，可以使用以下方式传参
+#### 初始化图时
+```python
+chart_init = {
+    "title_color": "#fff",
+    "title_pos": "center",
+    "width": 1100,
+    "height": 600,
+    "background_color": '#404a59'
+}
+geo = Geo("全国主要城市空气质量", "data from pm2.5", **chart_init)
+```
+
+#### 增加图例时
+```python
+pie = Pie('各类电影中"好片"所占的比例', "数据来着豆瓣", title_pos='center')
+pie_style = {
+    "radius": [18, 24],
+    "label_pos": "center",
+    "is_label_show": True,
+    "label_text_color": None
+}
+pie.add("", ["剧情", ""], [25, 75], center=[10, 30], **pie_style)
+pie.add("", ["奇幻", ""], [24, 76], center=[30, 30], **pie_style)
+pie.add("", ["爱情", ""], [14, 86], center=[50, 30], **pie_style)
+pie.add("", ["惊悚", ""], [11, 89], center=[70, 30], **pie_style)
+```
+这样会使得每个图例都会按照设定的风格
 
 
 # 集成Flask&Django
