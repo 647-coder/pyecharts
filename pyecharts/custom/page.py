@@ -98,3 +98,6 @@ class Page(object):
             dependencies.remove('echarts')
             dependencies = ['echarts'] + list(dependencies)
         return dependencies
+
+    def __len__(self):
+        return len(self.__charts)
